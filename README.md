@@ -7,7 +7,7 @@ Contributors: Giuseppe Sanseverino (technical development), Philipp Fabritius (t
 
 In the framework of the [Bitplush](https://www.interaktive-technologien.de/projekte/bitplush) project, a co-design workshop is organized to investigate the effect of different vibration patterns to map emotions of a user that is remotely activiating vibration motors inplemented in a plush toy.
 
-In this repositiory the code written to control a vibration motor via a webb app is shared. 
+In this repositiory the code written to control a vibration motor using a web app is shared. 
 
 ## Material used
 
