@@ -24,7 +24,7 @@ The connection scheme is shown in the picture below. Please note that in case yo
 
 ## Code
 
-The Arduino code reported here is doing the following:
+The Arduino code reported [here](https://github.com/giuseppesanseverino/VibrationMotorControl/blob/main/WebAppVibrationMotor_ArduinoUNO-R4.ino) is doing the following:
 
 1- Connectiong Arduino board to a WiFi network (make sure that the board and the device from where the webapp should be operated are on the same board). IMPORTANT: Arduino Uno R4 WiFi requires a 2.4 GHz network.
 
