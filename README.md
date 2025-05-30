@@ -30,7 +30,9 @@ The Arduino code reported here is doing the following:
 
 2- Once the connection is established, the board will output an IP address in the Arduino IDE Serial Monitor. Copy and paste this in your browser to access the web interface.
 
-3- The buttons in the interface are activating the vibration motor.
+3- The buttons in the interface are activating the vibration motor. In the picture below a screen capture of the web application.
+
+<img width="312" alt="Screenshot 2025-05-30 at 15 35 59" src="https://github.com/user-attachments/assets/538d08ed-56fa-4cf3-9540-fa67183bdaa0" />
 
 ### Define different vibration patterns
 
