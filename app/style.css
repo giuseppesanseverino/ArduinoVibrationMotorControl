@@ -1,0 +1,23 @@
+
+.controls {
+  margin-top: 340px;
+}
+button {
+  background: #ffb347;
+  border: none;
+  border-radius: 8px;
+  padding: 16px 32px;
+  margin: 10px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button:hover {
+  background: #ff9900;
+  color: #fff;
+}
+.status {
+  margin-top: 20px;
+  min-height: 24px;
+  color: #333;
+}
