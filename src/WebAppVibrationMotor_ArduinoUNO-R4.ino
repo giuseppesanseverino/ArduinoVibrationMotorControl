@@ -2,8 +2,8 @@
 #include "ArduinoGraphics.h"
 #include "Arduino_LED_Matrix.h"
 
-const char* ssid = "Your Network Name";
-const char* password = "Your Network PW";
+const char* ssid = "Your Network Name"; 
+const char* password = "Your Network PW"; 
 const int motorPin = 2; // set vibration motor pin (any digital pin on the Arduino Board)
 
 ArduinoLEDMatrix matrix;
@@ -62,13 +62,16 @@ void loop() {
 
     // Send HTML response
     client.println("HTTP/1.1 200 OK");
-    client.println("Content-Type: text/html\n");
+    client.println("Content-Type: text/html");
+    client.println("Connection: close"); // Ensure connection closes properly
+    client.println();
     client.println("<!DOCTYPE html><html><body>");
     client.println("<h1>Arduino Web Control</h1>");
     client.println("<form action=\"/VP1=ON\" method=\"GET\"><button>Vibration Pattern 1</button></form>");
     client.println("<form action=\"/VP2=ON\" method=\"GET\"><button>Vibration Pattern 2</button></form>");
     client.println("</body></html>");
-    client.stop();
+    delay(1); // Give the client time to receive the data
+    client.stop(); // Properly close the connection
     Serial.println("Client disconnected.");
   }
 

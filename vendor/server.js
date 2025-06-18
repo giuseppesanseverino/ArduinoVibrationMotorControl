@@ -6,9 +6,14 @@ const app = express();
 const PORT = 3000;
 
 // Insert Arduino's IP address here:
-const ARDUINO_IP = '';
-
-app.use(cors());
+const ARDUINO_IP = ''; 
+// CORS setup
+app.use(cors({
+  origin: '', // Adjust this to your frontend's origin
+  credentials: true,
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type']
+}));
 app.use(express.json());
 
 // Endpoint to trigger vibration pattern 1
