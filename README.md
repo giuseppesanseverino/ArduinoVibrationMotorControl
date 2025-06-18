@@ -42,3 +42,16 @@ A custom function is created (startVibration) that requires as input the duratio
 
 The code reported here only works for Arduino UNO R4 WiFi boards. It can be used with other UNO boards by adding external WiFi module and by removing the code parts that are making use of the integrated led matrix in the R4 WiFi board.
 
+## New Setup for Web-App
+- Identify Arduino IP
+- Input Arduinio IP in server.js
+- Input frontend origin in CORS header
+
+- Start Node.js
+    - Open Temrinal 
+    - "cd vendor" 
+    - "npm start"
+
+- Open index.html with Live Server 
+
+Important: Connect Vibration Motor to the Pin you asigned in the Arduino Script

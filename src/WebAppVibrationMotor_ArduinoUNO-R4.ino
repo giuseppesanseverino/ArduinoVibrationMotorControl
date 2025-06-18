@@ -1,97 +1,121 @@
-#include "WiFiS3.h"
-#include "ArduinoGraphics.h"
-#include "Arduino_LED_Matrix.h"
+#include <WiFiS3.h>
+#include <Arduino_JSON.h>
 
-const char* ssid = "Your Network Name"; 
-const char* password = "Your Network PW"; 
-const int motorPin = 2; // set vibration motor pin (any digital pin on the Arduino Board)
+const char* ssid = "Your Network Name";
+const char* password = "Your Network PW";
+const int motorPin = 2;
 
-ArduinoLEDMatrix matrix;
 WiFiServer server(80);
 
 void setup() {
   Serial.begin(9600);
+  pinMode(motorPin, OUTPUT);
+  digitalWrite(motorPin, LOW);
 
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.println("Connecting to WiFi...");
   }
-
   Serial.print("Connected! IP: ");
   Serial.println(WiFi.localIP());
 
   server.begin();
-
-  pinMode(motorPin, OUTPUT);
-  digitalWrite(motorPin, LOW); // Ensure motor is off at startup
-
-  matrix.begin();
-
-  matrix.beginDraw();
-  matrix.stroke(0xFFFFFFFF);
-  const char text[] = "Hi!";   // you can add here a custom "welcome" text
-  matrix.textFont(Font_4x6);
-  matrix.beginText(0, 1, 0xFFFFFF);
-  matrix.println(text);
-  matrix.endText();
-
-  matrix.endDraw();
-
-  delay(2000);
 }
 
 void loop() {
   WiFiClient client = server.available();
   if (client) {
-    Serial.println("New Client Connected");
     String request = client.readStringUntil('\r');
-    Serial.println(request);
     client.flush();
 
-    // Basic command handling
-    if (request.indexOf("/VP1=ON") != -1) {
-      startVibration(1000);  // Vibrate for 1 second (1000 ms)
-      writeLEDmatrix("VP1"); // Write a scrolling text on the Arduino UNO R4 WiFi Led Matrix
+    // Handle custom pattern POST
+    if (request.indexOf("POST /vibrate/custom") != -1) {
+      // Wait for body
+      while (client.available() == 0) delay(1);
+      String body = "";
+      while (client.available()) {
+        char c = client.read();
+        body += c;
+      }
+      // Parse JSON
+      int jsonStart = body.indexOf('{');
+      if (jsonStart != -1) {
+        String jsonString = body.substring(jsonStart);
+        JSONVar json = JSON.parse(jsonString);
+        if (JSON.typeof(json) == "undefined") {
+          sendResponse(client, 400, "Invalid JSON");
+        } else {
+          JSONVar pattern = json["pattern"];
+          if (pattern.length() > 0) {
+            runPattern(pattern);
+            sendResponse(client, 200, "Pattern executed");
+          } else {
+            sendResponse(client, 400, "No pattern steps");
+          }
+        }
+      } else {
+        sendResponse(client, 400, "No JSON found");
+      }
     }
-    if (request.indexOf("/VP2=ON") != -1) {
-      startVibration(500);   // Vibrate for 0.5 second (500 ms)
-      writeLEDmatrix("VP2"); // Write a scrolling text on the Arduino UNO R4 WiFi Led Matrix
-      startVibration(500);   // Vibrate for 0.5 second (500 ms)
+    // Handle simple GETs for pattern 1 and 2 (optional)
+    else if (request.indexOf("/VP1=ON") != -1) {
+      startVibration(1000);
+      sendResponse(client, 200, "Pattern 1 executed");
     }
-
-    // Send HTML response
-    client.println("HTTP/1.1 200 OK");
-    client.println("Content-Type: text/html");
-    client.println("Connection: close"); // Ensure connection closes properly
-    client.println();
-    client.println("<!DOCTYPE html><html><body>");
-    client.println("<h1>Arduino Web Control</h1>");
-    client.println("<form action=\"/VP1=ON\" method=\"GET\"><button>Vibration Pattern 1</button></form>");
-    client.println("<form action=\"/VP2=ON\" method=\"GET\"><button>Vibration Pattern 2</button></form>");
-    client.println("</body></html>");
-    delay(1); // Give the client time to receive the data
-    client.stop(); // Properly close the connection
-    Serial.println("Client disconnected.");
+    else if (request.indexOf("/VP2=ON") != -1) {
+      startVibration(500);
+      delay(100);
+      startVibration(500);
+      sendResponse(client, 200, "Pattern 2 executed");
+    }
+    else if (request.indexOf("/VP3=ON") != -1) {
+      // Define your custom pattern for "Neutral"
+      startVibration(300);
+      delay(200);
+      startVibration(300);
+      sendResponse(client, 200, "Pattern 3 executed");
+    }
+    else if (request.indexOf("/VP4=ON") != -1) {
+      // Define your custom pattern for "Sadness"
+      startVibration(200);
+      delay(400);
+      startVibration(200);
+      delay(400);
+      startVibration(200);
+      sendResponse(client, 200, "Pattern 4 executed");
+    }
+    else {
+      sendResponse(client, 404, "Not found");
+    }
+    delay(1);
+    client.stop();
   }
-
+}
+ 
+void runPattern(JSONVar pattern) {
+  for (int i = 0; i < pattern.length(); i++) {
+    int vibrate = (int)pattern[i]["vibrate"];
+    int pause = (int)pattern[i]["pause"];
+    digitalWrite(motorPin, HIGH);
+    delay(vibrate);
+    digitalWrite(motorPin, LOW);
+    delay(pause);
+  }
 }
 
-// Function - Start the vibration motor for a specified time in ms
-void startVibration(int highTimeMs) {
+void startVibration(int duration) {
   digitalWrite(motorPin, HIGH);
-  delay(highTimeMs);              // Keep motor on
-  digitalWrite(motorPin, LOW);    // Then turn it off
+  delay(duration);
+  digitalWrite(motorPin, LOW);
 }
 
-// Function - write on LED matrix
-void writeLEDmatrix(const char* textmess) {
-  matrix.beginDraw();
-  matrix.stroke(0xFFFFFFFF);
-  matrix.textScrollSpeed(100);
-  matrix.textFont(Font_5x7);
-  matrix.beginText(0, 1, 0xFFFFFF);
-  matrix.println(textmess);
-  matrix.endText(SCROLL_LEFT);
-  matrix.endDraw();
+void sendResponse(WiFiClient& client, int code, String message) {
+  client.println("HTTP/1.1 " + String(code) + " OK");
+  client.println("Content-Type: application/json");
+  client.println("Connection: close");
+  client.println();
+  client.print("{\"status\":\"");
+  client.print(message);
+  client.println("\"}");
 }

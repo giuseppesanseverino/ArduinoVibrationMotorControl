@@ -1,18 +1,22 @@
-
 .controls {
-  margin-top: 340px;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
 }
-button {
+.controls button {
   background: #ffb347;
   border: none;
   border-radius: 8px;
   padding: 16px 32px;
-  margin: 10px;
+  margin: 10px 0;
   font-size: 1.1em;
   cursor: pointer;
   transition: background 0.2s;
 }
-button:hover {
+.controls button:hover {
   background: #ff9900;
   color: #fff;
 }
