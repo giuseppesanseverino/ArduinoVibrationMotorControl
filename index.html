@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Plush Bear Vibration Control</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="app/style.css">
+</head>
+<body class="bg-dark text-light">
+  <div class="container py-5">
+    <div class="row justify-content-center mb-4">
+      <div class="col-auto">
+        <h1 class="display-5 fw-bold text-center mb-3">Plush Bear Vibration Control</h1>
+        <p class="lead text-center text-light opacity-75">Control the vibration motors inside the plush bear for your scientific study.</p>
+      </div>
+    </div>
+    <div class="row justify-content-center mb-4">
+      <div class="col-auto">
+        <div class="d-flex flex-row gap-3">
+          <button class="btn btn-outline-light btn-lg px-4" onclick="activatePattern(1)">Anger</button>
+          <button class="btn btn-outline-light btn-lg px-4" onclick="activatePattern(2)">Happiness</button>
+          <button class="btn btn-outline-light btn-lg px-4" onclick="activatePattern(3)">Neutral</button>
+          <button class="btn btn-outline-light btn-lg px-4" onclick="activatePattern(4)">Sadness</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Status box (initially hidden) -->
+    <div class="row justify-content-center mb-5"> <!-- Increased spacing with mb-5 -->
+      <div class="col-auto">
+        <div id="status-container" class="d-none"> <!-- Initially hidden with d-none -->
+          <div id="status" class="alert border border-light text-light py-2 px-3" role="alert" style="background-color: #212529;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pattern Builder Section (with more top spacing) -->
+    <div class="row justify-content-center mt-4"> <!-- Added mt-4 for top margin -->
+      <div class="col-md-8 col-lg-6">
+        <div class="card bg-dark text-light border-light">
+          <div class="card-body">
+            <h2 class="h5 mb-3">Create Custom Pattern</h2>
+            <div class="mb-3">
+              <input type="text" id="pattern-name" class="form-control bg-dark text-light border-secondary" placeholder="Pattern name" />
+            </div>
+            <div id="steps" class="mb-3"></div>
+            <div class="mb-3 d-flex gap-2">
+              <button class="btn btn-outline-light" onclick="addStep()">Add Step</button>
+              <button class="btn btn-outline-light" onclick="savePattern()">Save Pattern</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Custom Patterns Section (initially hidden) -->
+    <div id="custom-patterns-section" class="row justify-content-center mt-4 d-none">
+      <div class="col-md-8 col-lg-6">
+        <div class="card bg-dark text-light border-light">
+          <div class="card-body">
+            <h2 class="h5 mb-3">Custom Patterns</h2>
+            <div id="custom-patterns" class="d-flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GitHub Link Section -->
+    <div class="row justify-content-center mt-4">
+      <div class="col-auto text-center">
+        <a href="https://github.com/giuseppesanseverino/ArduinoVibrationMotorControl" target="_blank" class="github-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" class="bi bi-github" viewBox="0 0 16 16">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.7-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  <script src="app/logic.js"></script>
+</body>
+</html>

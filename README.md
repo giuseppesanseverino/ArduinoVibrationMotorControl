@@ -3,7 +3,7 @@
 ## Intro
 This project aims to support the investigation of different vibration patters during co-design workshops. 
 
-Contributors: Giuseppe Sanseverino (technical development), Philipp Fabritius (technical support), Lena Marcella Nischwitz (design of vibration patterns)
+Contributors: Giuseppe Sanseverino (technical development & hardware implemetnation), Philipp Fabritius (technical development & frontend), Lena Marcella Nischwitz (design of vibration patterns)
 
 In the framework of the [Bitplush](https://www.interaktive-technologien.de/projekte/bitplush) project, a co-design workshop is organized to investigate the effect of different vibration patterns to map emotions of a user that is remotely activiating vibration motors inplemented in a plush toy.
 
@@ -41,4 +41,19 @@ A custom function is created (startVibration) that requires as input the duratio
 ## Additional info
 
 The code reported here only works for Arduino UNO R4 WiFi boards. It can be used with other UNO boards by adding external WiFi module and by removing the code parts that are making use of the integrated led matrix in the R4 WiFi board.
+
+## New Setup for Web-App
+- Identify Arduino IP
+- Input Arduinio IP in server.js
+- Input frontend origin in CORS header
+
+- Start Node.js
+    - Open Temrinal 
+    - "cd vendor" 
+    - "npm start"
+
+- Open index.html with Live Server 
+
+Important: Connect Vibration Motor to the Pin you asigned in the Arduino Script
+EVEN MORE IMPORTANT: Applications that use the same port (like the slides extended Plugin for Obsidian) might cause a CORS issiue (close them or select a different port) (yes I wasted more than 3 hours to figure this out)
 
