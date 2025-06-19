@@ -58,31 +58,39 @@ void loop() {
         sendResponse(client, 400, "No JSON found");
       }
     }
-    // Handle simple GETs for pattern 1 and 2 (optional)
+    // Predefined Patterns
+    //anger
     else if (request.indexOf("/VP1=ON") != -1) {
+      startVibration(1000);
+      delay(100);
+      startVibration(1000);
+      delay(100);
       startVibration(1000);
       sendResponse(client, 200, "Pattern 1 executed");
     }
+    //happiness 
     else if (request.indexOf("/VP2=ON") != -1) {
+      startVibration(500);
+      delay(100);
+      startVibration(500);
+      delay(100);
+      startVibration(500);
+      delay(100);
+      startVibration(500);
+      delay(100);
       startVibration(500);
       delay(100);
       startVibration(500);
       sendResponse(client, 200, "Pattern 2 executed");
     }
+    //neutral
     else if (request.indexOf("/VP3=ON") != -1) {
-      // Define your custom pattern for "Neutral"
-      startVibration(300);
-      delay(200);
-      startVibration(300);
+     startVibration(200);
       sendResponse(client, 200, "Pattern 3 executed");
     }
+    //sadness
     else if (request.indexOf("/VP4=ON") != -1) {
-      // Define your custom pattern for "Sadness"
-      startVibration(200);
-      delay(400);
-      startVibration(200);
-      delay(400);
-      startVibration(200);
+      startVibration(3000);
       sendResponse(client, 200, "Pattern 4 executed");
     }
     else {

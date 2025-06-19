@@ -55,3 +55,5 @@ The code reported here only works for Arduino UNO R4 WiFi boards. It can be used
 - Open index.html with Live Server 
 
 Important: Connect Vibration Motor to the Pin you asigned in the Arduino Script
+EVEN MORE IMPORTANT: Applications that use the same port (like the slides extended Plugin for Obsidian) might cause a CORS issiue (close them or select a different port) (yes I wasted more than 3 hours to figure this out)
+
