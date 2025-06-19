@@ -9,7 +9,7 @@ In the framework of the [Bitplush](https://www.interaktive-technologien.de/proje
 
 In this repositiory the code written to control a vibration motor using a web app is shared. 
 
-A basic version of this project relying only on C++ and Arduino IDE can be found in the branch [BasicImplementation](https://github.com/giuseppesanseverino/ArduinoVibrationMotorControl/tree/BasicImplementation)
+A basic version of this project relying only on C++ and Arduino IDE can be found in the branch [BasicImplementation](https://github.com/giuseppesanseverino/ArduinoVibrationMotorControl/tree/BasicImplementation).
 
 ## Material used
 
