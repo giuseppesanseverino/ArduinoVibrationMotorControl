@@ -3,7 +3,7 @@
 ## Intro
 This project aims to support the investigation of different vibration patters during co-design workshops. 
 
-Contributors: Giuseppe Sanseverino (technical development), Philipp Fabritius (technical support), Lena Marcella Nischwitz (design of vibration patterns)
+Contributors: Giuseppe Sanseverino (technical development & hardware implemetnation), Philipp Fabritius (technical development & frontend), Lena Marcella Nischwitz (design of vibration patterns)
 
 In the framework of the [Bitplush](https://www.interaktive-technologien.de/projekte/bitplush) project, a co-design workshop is organized to investigate the effect of different vibration patterns to map emotions of a user that is remotely activiating vibration motors inplemented in a plush toy.
 
