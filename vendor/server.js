@@ -1,20 +1,15 @@
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
 
-// Insert Arduino's IP address here:
-const ARDUINO_IP = '192.168.1.100'; 
-// CORS setup
-app.use(cors({
-  origin: 'http://127.0.0.1:5500 ', // Adjust this to your frontend's origin
-  credentials: true,
-  methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type']
-}));
+let ARDUINO_IP = ''; // keep editable or read from config
 app.use(express.json());
+
+// Serve frontend from ../public folder
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Endpoint to trigger vibration pattern 1
 app.get('/vibrate/pattern1', async (req, res) => {
@@ -22,7 +17,8 @@ app.get('/vibrate/pattern1', async (req, res) => {
     await axios.get(`http://${ARDUINO_IP}/VP1=ON`);
     res.json({ status: 'Pattern 1 triggered' });
   } catch (err) {
-    res.status(500).json({ error: 'Failed to trigger pattern 1' });
+    console.error('Arduino error:', err.message);
+    res.status(500).json({ error: 'Failed to trigger pattern 1: ' + err.message });
   }
 });
 
@@ -68,6 +64,11 @@ app.post('/vibrate/custom', async (req, res) => {
   }
 });
 
+// SPA fallback
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
 app.listen(PORT, () => {
-  console.log(`Backend server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

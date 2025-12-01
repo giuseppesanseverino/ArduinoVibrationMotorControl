@@ -12,7 +12,7 @@ async function activatePattern(pattern) {
   if (pattern === 3) endpoint = '/vibrate/pattern3';
   if (pattern === 4) endpoint = '/vibrate/pattern4';
   try {
-    const res = await fetch('http://' + arduinoIP + endpoint);
+    const res = await fetch(endpoint); // Relative URL
     const data = await res.json();
     if (res.ok) {
       status.textContent = data.status;
@@ -26,7 +26,7 @@ async function activatePattern(pattern) {
 
 let steps = [];
 let customPatterns = [];
-let arduinoIP = 'localhost:3000'; // Default backend address
+
 
 function setArduinoIP() {
   const ipInput = document.getElementById('arduino-ip');
@@ -131,7 +131,7 @@ async function sendPattern(patternSteps) {
   
   status.textContent = 'Sending pattern...';
   try {
-    const res = await fetch('http://' + arduinoIP + '/vibrate/custom', {
+    const res = await fetch('/vibrate/custom', {  // Fix: Use the correct endpoint
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ pattern: patternSteps })
