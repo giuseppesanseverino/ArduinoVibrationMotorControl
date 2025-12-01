@@ -1,12 +1,41 @@
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
+const bonjour = require('bonjour')();
+const fs = require('fs');
 
 const app = express();
 const PORT = 3000;
 
-let ARDUINO_IP = ''; // keep editable or read from config
+let ARDUINO_IP = process.env.ARDUINO_IP || null;
+const CONFIG_PATH = path.join(__dirname, 'config.json');
+
+function loadConfig() {
+  if (fs.existsSync(CONFIG_PATH)) {
+    const cfg = JSON.parse(fs.readFileSync(CONFIG_PATH));
+    ARDUINO_IP = cfg.ARDUINO_IP || ARDUINO_IP;
+  }
+}
+function saveConfig() {
+  fs.writeFileSync(CONFIG_PATH, JSON.stringify({ ARDUINO_IP }));
+}
+
+loadConfig();
+
+// Try to find Arduino via bonjour (mDNS)
+bonjour.find({ type: 'http' }, service => {
+  if (!ARDUINO_IP && service.name && service.name.toLowerCase().includes('esp')) {
+    ARDUINO_IP = service.addresses[0];
+    console.log('Found Arduino via Bonjour:', ARDUINO_IP);
+    saveConfig();
+  }
+});
+
+//Fallback to static IP if bonjour fails
+//TO-DO ask for manual IP setup via frontend
+
 app.use(express.json());
+
 
 // Serve frontend from ../public folder
 app.use(express.static(path.join(__dirname, '../public')));
@@ -61,6 +90,34 @@ app.post('/vibrate/custom', async (req, res) => {
     res.json({ status: 'Custom pattern triggered' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to trigger custom pattern' });
+  }
+});
+// Arduino configuration endpoints
+// get config (IP)
+app.get('/api/config', (req, res) => {
+  res.json({ ARDUINO_IP });
+});
+
+// set config (IP)
+app.post('/api/config', (req, res) => {
+  const { ARDUINO_IP: newIP } = req.body;
+  if (newIP && typeof newIP === 'string') {
+    ARDUINO_IP = newIP.trim();
+    saveConfig();
+    res.json({ status: 'ok', ARDUINO_IP });
+  } else {
+    res.status(400).json({ error: 'Invalid IP' });
+  }
+});
+
+// test connectivity
+app.get('/api/test', async (req, res) => {
+  if (!ARDUINO_IP) return res.status(400).json({ error: 'No Arduino IP configured' });
+  try {
+    await axios.get(`http://${ARDUINO_IP}/ping`); // implement /ping on Arduino or use VP1=ON or similar
+    res.json({ status: 'ok', ARDUINO_IP });
+  } catch (err) {
+    res.status(500).json({ error: 'Cannot reach Arduino: ' + (err.message || err) });
   }
 });
 

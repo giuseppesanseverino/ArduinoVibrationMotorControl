@@ -142,6 +142,50 @@ async function sendPattern(patternSteps) {
     status.textContent = 'Could not reach server.';
   }
 }
+// Frontend logic for Arduino IP configuration
+async function loadConfigFromServer() {
+  try {
+    const res = await fetch('/api/config');
+    const data = await res.json();
+    if (data.ARDUINO_IP) {
+      document.getElementById('detected').innerText = 'Detected: ' + data.ARDUINO_IP;
+      document.getElementById('arduino-ip').value = data.ARDUINO_IP;
+    }
+  } catch (err) {
+    console.error('Cannot load config:', err);
+  }
+}
+
+async function saveIP() {
+  const ip = document.getElementById('arduino-ip').value.trim();
+  try {
+    const res = await fetch('/api/config', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ARDUINO_IP: ip })
+    });
+    const data = await res.json();
+    document.getElementById('detected').innerText = data.ARDUINO_IP ? 'Configured: ' + data.ARDUINO_IP : 'Config saved';
+  } catch (err) {
+    console.error('Save IP failed', err);
+  }
+}
+
+async function testConnection() {
+  const el = document.getElementById('detected');
+  el.innerText = 'Testing...';
+  try {
+    const res = await fetch('/api/test');
+    const data = await res.json();
+    if (res.ok) el.innerText = 'Connected: ' + data.ARDUINO_IP;
+    else el.innerText = 'Not reachable';
+  } catch (err) {
+    el.innerText = 'Test failed';
+  }
+}
+
+// On load
+document.addEventListener('DOMContentLoaded', loadConfigFromServer);
 
 // Initial render
 renderSteps();
