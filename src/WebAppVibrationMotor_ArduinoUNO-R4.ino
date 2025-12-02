@@ -58,6 +58,11 @@ void loop() {
         sendResponse(client, 400, "No JSON found");
       }
     }
+    // Test Case
+    else if (request.indexOf("/ping") != -1) {
+      sendResponse(client, 200, "Connected");
+    }
+
     // Predefined Patterns
     //anger
     else if (request.indexOf("/VP1=ON") != -1) {

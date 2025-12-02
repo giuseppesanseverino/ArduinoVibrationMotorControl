@@ -22,9 +22,9 @@ function saveConfig() {
 
 loadConfig();
 
-// Try to find Arduino via bonjour (mDNS)
+// Try to find Arduino via bonjour (mDNS) -> currently not functional - needs ARDUINO side mDNS setup
 bonjour.find({ type: 'http' }, service => {
-  if (!ARDUINO_IP && service.name && service.name.toLowerCase().includes('esp')) {
+  if (!ARDUINO_IP && service.name && service.name.toLowerCase().includes('arduino')) {
     ARDUINO_IP = service.addresses[0];
     console.log('Found Arduino via Bonjour:', ARDUINO_IP);
     saveConfig();
@@ -32,7 +32,7 @@ bonjour.find({ type: 'http' }, service => {
 });
 
 //Fallback to static IP if bonjour fails
-//TO-DO ask for manual IP setup via frontend
+//TO-DO ask for manual IP setup via frontend - Done
 
 app.use(express.json());
 
@@ -92,6 +92,7 @@ app.post('/vibrate/custom', async (req, res) => {
     res.status(500).json({ error: 'Failed to trigger custom pattern' });
   }
 });
+
 // Arduino configuration endpoints
 // get config (IP)
 app.get('/api/config', (req, res) => {
@@ -114,7 +115,7 @@ app.post('/api/config', (req, res) => {
 app.get('/api/test', async (req, res) => {
   if (!ARDUINO_IP) return res.status(400).json({ error: 'No Arduino IP configured' });
   try {
-    await axios.get(`http://${ARDUINO_IP}/ping`); // implement /ping on Arduino or use VP1=ON or similar
+    await axios.get(`http://${ARDUINO_IP}/ping`); // implement /ping Test Case on Arduino - Done
     res.json({ status: 'ok', ARDUINO_IP });
   } catch (err) {
     res.status(500).json({ error: 'Cannot reach Arduino: ' + (err.message || err) });
