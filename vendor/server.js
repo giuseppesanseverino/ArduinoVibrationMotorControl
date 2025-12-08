@@ -1,7 +1,6 @@
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
-const bonjour = require('bonjour')();
 const fs = require('fs');
 
 const app = express();
@@ -24,9 +23,13 @@ loadConfig();
 
 app.use(express.json());
 
+const isPackaged = process.env.IS_PACKAGED === 'true';
 
 // Serve frontend from /public folder
-app.use(express.static(path.join(__dirname, '../public')));
+const publicPath = isPackaged 
+  ? path.join(process.env.RESOURCES_PATH, 'app.asar.unpacked', 'public') 
+  : path.join(__dirname, 'public');  // Assuming public is now in vendor/
+app.use(express.static(publicPath));
 
 // Endpoint to trigger vibration pattern 1
 app.get('/vibrate/pattern1', async (req, res) => {
@@ -112,7 +115,7 @@ app.get('/api/test', async (req, res) => {
 
 // SPA fallback
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(publicPath, 'index.html'));
 });
 
 app.listen(PORT, () => {
