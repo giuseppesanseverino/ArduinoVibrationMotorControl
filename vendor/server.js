@@ -22,22 +22,10 @@ function saveConfig() {
 
 loadConfig();
 
-// Try to find Arduino via bonjour (mDNS) -> currently not functional - needs ARDUINO side mDNS setup
-bonjour.find({ type: 'http' }, service => {
-  if (!ARDUINO_IP && service.name && service.name.toLowerCase().includes('arduino')) {
-    ARDUINO_IP = service.addresses[0];
-    console.log('Found Arduino via Bonjour:', ARDUINO_IP);
-    saveConfig();
-  }
-});
-
-//Fallback to static IP if bonjour fails
-//TO-DO ask for manual IP setup via frontend - Done
-
 app.use(express.json());
 
 
-// Serve frontend from ../public folder
+// Serve frontend from /public folder
 app.use(express.static(path.join(__dirname, '../public')));
 
 // Endpoint to trigger vibration pattern 1
