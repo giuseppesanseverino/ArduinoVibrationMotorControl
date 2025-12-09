@@ -33,7 +33,7 @@
       "node_modules/**",
       "public/**"
     ],
-    "asarUnpack": ["server.js","public/**"],
+    "asarUnpack": ["server.js","public/**","node_modules/**"],
 
     "mac": false,
 
