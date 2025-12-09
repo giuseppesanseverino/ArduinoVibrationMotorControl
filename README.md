@@ -32,7 +32,7 @@ The Arduino code reported [here](https://github.com/giuseppesanseverino/Vibratio
 
 3- The buttons in the interface are activating the vibration motor. In the picture below a screen capture of the web application.
 
-<img width="312" alt="Screenshot 2025-05-30 at 15 35 59" src="https://github.com/user-attachments/assets/538d08ed-56fa-4cf3-9540-fa67183bdaa0" />
+<img width="1454" height="681" alt="Screenshot 2025-12-09 160649" src="https://github.com/user-attachments/assets/8c625766-9657-4888-b473-da7db2cbb3f2" />
 
 Defining Different Vibration Patterns
 A custom startVibration function is created that takes the vibration duration in ms as input. Note that this motor only supports ON (HIGH) or OFF (LOW) states. Different patterns are achieved by varying durations or sequences of vibrations, with delays for pauses.
