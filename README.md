@@ -34,6 +34,9 @@ The Arduino code reported [here](https://github.com/giuseppesanseverino/Vibratio
 
 <img width="312" alt="Screenshot 2025-05-30 at 15 35 59" src="https://github.com/user-attachments/assets/538d08ed-56fa-4cf3-9540-fa67183bdaa0" />
 
+Defining Different Vibration Patterns
+A custom startVibration function is created that takes the vibration duration in ms as input. Note that this motor only supports ON (HIGH) or OFF (LOW) states. Different patterns are achieved by varying durations or sequences of vibrations, with delays for pauses.
+
 ### Define different vibration patterns
 
 A custom function is created (startVibration) that requires as input the duration of the vibration in ms. Please note that this specific motor can only work in two status: ON (HIGH), or OFF (LOW). Therefore, the only way to generate different patterns is to provide different duration of the vibration or different sequences of vibrations. A delay can be defined to have pauses between two or more vibrations. 
@@ -42,19 +45,29 @@ A custom function is created (startVibration) that requires as input the duratio
 
 The code reported here only works for Arduino UNO R4 WiFi boards. It can be used with other UNO boards by adding external WiFi module and by removing the code parts that are making use of the integrated led matrix in the R4 WiFi board.
 
-## New Setup for Web-App
-(Note: Workflow changed slightly for new setup - README will be updated soon)
-- Identify Arduino IP
-- Input Arduinio IP in server.js
-- Input frontend origin in CORS header
+## Installation
+Pre-Built App: (currently not supported)
 
-- Start Node.js
-    - Open Temrinal 
-    - "cd vendor" 
-    - "npm start"
+Building from Source:
+1. Clone this repository: `git clone https://github.com/giuseppesanseverino/VibrationMotorControl.git`
+2. Install Node.js from [nodejs.org](https://nodejs.org/en).
+3. Navigate to the project: cd VibrationMotorControl/vendor
+4. Install dependencies: npm install
+5. Build the app: `npm run build`
+6. The built files will be in `dist` (e.g., `.exe` for Windows, `.dmg` for macOS). -> Currently only tested on win
 
-- Open index.html with Live Server 
+## Usage
+1. Flash the Arduino:
+- Open `WebAppVibrationMotor_ArduinoUNO-R4.ino` in Arduino IDE.
+- Upload to your Arduino UNO R4 WiFi.
+- Note the IP address from the Serial Monitor. (If it shows 0.0.0.0 check your Router)
 
-Important: Connect Vibration Motor to the Pin you asigned in the Arduino Script
-EVEN MORE IMPORTANT: Applications that use the same port (like the slides extended Plugin for Obsidian) might cause a CORS issiue (close them or select a different port) (yes I wasted more than 3 hours to figure this out)
+2. Run the App:
+- Launch the installed desktop app.
+- The app starts a local server and opens a window with the control interface.
 
+3. Configure and Control:
+- Enter the Arduino's IP address in the app's config section. (It is recommended to assign a fixed IP in router settings)
+- Test connectivity.
+- Use the buttons to trigger predefined vibration patterns or create custom ones.
+- The app communicates directly with the Arduino over the network (It just needs power)
