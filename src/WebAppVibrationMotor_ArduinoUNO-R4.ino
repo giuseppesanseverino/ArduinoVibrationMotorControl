@@ -1,27 +1,32 @@
 #include <WiFiS3.h>
 #include <Arduino_JSON.h>
+#include <EEPROM.h>
+#include "arduino_secrets.h"  
 
-const char* ssid = "Your Network Name";
-const char* password = "Your Network PW";
 const int motorPin = 2;
-
 WiFiServer server(80);
 
 void setup() {
   Serial.begin(9600);
+  delay(1000);
   pinMode(motorPin, OUTPUT);
   digitalWrite(motorPin, LOW);
+  
+  // Credentials
+  char savedSsid[32] = SECRET_SSID;
+  char savedPass[32] = SECRET_PASS;
 
-  WiFi.begin(ssid, password);
+  // Connect to saved network
+  WiFi.begin(savedSsid, savedPass);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.println("Connecting to WiFi...");
   }
   Serial.print("Connected! IP: ");
   Serial.println(WiFi.localIP());
-
   server.begin();
 }
+
 
 void loop() {
   WiFiClient client = server.available();
@@ -58,6 +63,11 @@ void loop() {
         sendResponse(client, 400, "No JSON found");
       }
     }
+    // Test Case
+    else if (request.indexOf("/ping") != -1) {
+      sendResponse(client, 200, "Connected");
+    }
+
     // Predefined Patterns
     //anger
     else if (request.indexOf("/VP1=ON") != -1) {
