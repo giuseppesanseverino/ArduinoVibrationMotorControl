@@ -1,6 +1,6 @@
 # Node.js dependencies
 /vendor/node_modules/
-/vendor/package-lock.json
+# /vendor/package-lock.json
 
 # Arduino build files
 *.elf
